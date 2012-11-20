@@ -33,14 +33,14 @@ import android.widget.ImageView;
  * loading of the image, so as to allow hosting fragments / activities to manage the network load
  * lifecycle themselves.
  * </p>
- * 
+ *
  * <p>
  * A recommended solution for loading the map image is our own <a
  * href="https://github.com/mitmel/Android-Image-Cache">Android Image Cache</a>.
  * </p>
- * 
+ *
  * @author <a href="mailto:spomeroy@mit.edu">Steve Pomeroy</a>
- * 
+ *
  */
 public class GoogleStaticMapView extends ImageView {
 
@@ -95,6 +95,10 @@ public class GoogleStaticMapView extends ImageView {
         mHasReceivedSet = true;
 
         updateMap();
+    }
+
+    public void clearMap() {
+        mHasReceivedSet = false;
     }
 
     @Override
