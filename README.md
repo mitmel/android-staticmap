@@ -1,5 +1,5 @@
-Android StaticMaps
-=================
+Android StaticMaps and other location widgets
+=============================================
 
 A simple library to easily add [Google static maps][] to your app.
 
@@ -8,6 +8,7 @@ Features
 
 * provides a UI widget to automatically determine map size and scale based which can be incorporated into an XML layout
 * generates map URL and pulls the API key from the application's manifest
+* also contains a LocationButton widget which can display a current/saved location and toggle between them interactively
 
 Using
 -----

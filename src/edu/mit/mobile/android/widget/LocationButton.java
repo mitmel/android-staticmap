@@ -52,9 +52,9 @@ import edu.mit.mobile.android.utils.AddressUtils;
  * {@link #setShowSaved(boolean)}. When the button is pressed, it will switch which location is
  * being shown.
  * </p>
- * 
+ *
  * @author <a href="mailto:spomeroy@mit.edu">Steve Pomeroy</a>
- * 
+ *
  */
 public class LocationButton extends Button {
     public static final String TAG = LocationButton.class.getSimpleName();
@@ -141,8 +141,8 @@ public class LocationButton extends Button {
         final Drawable left = getCompoundDrawables()[0];
         if (left != null) {
             left.setLevel(level);
+            postInvalidate();
         }
-        postInvalidate();
     }
 
     /**

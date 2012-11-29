@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="LocationLink">
+    <style name="LocationButton">
         <item name="android:background">@drawable/location_link_bg</item>
         <item name="android:textColor">@color/location_link_text</item>
         <item name="android:drawableLeft">@drawable/ic_location</item>
