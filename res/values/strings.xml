@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="location_button_no_location">No Location</string>
+    <string name="location_button_location_found">Location found</string>
+    <string name="location_button_accuracy_meter">±%.0f meters</string>
+    <string name="location_button_accuracy_kilometer">±%.01f kilometers</string>
+
+</resources>
