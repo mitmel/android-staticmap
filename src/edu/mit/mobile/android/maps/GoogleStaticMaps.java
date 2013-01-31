@@ -1,7 +1,7 @@
 package edu.mit.mobile.android.maps;
 
 /*
- * Copyright (C) 2012 MIT Mobile Experience Lab
+ * Copyright (C) 2012-2013 MIT Mobile Experience Lab
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,6 +17,7 @@ package edu.mit.mobile.android.maps;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -35,20 +36,36 @@ import android.util.DisplayMetrics;
  * API key (this is <em>not</em> a normal Google Maps API key) to your Android manifest in the
  * &lt;application /&gt; section:
  * </p>
- * 
+ *
  * <pre>
  *         &lt;meta-data
  *             android:name="edu.mit.mobile.android.maps.GOOGLE_STATIC_MAPS_API_KEY"
  *             android:value="AAeeSUeOKuhEuEu3eu43E2ue#jueEEuuU3hwm0" /&gt;
- * 
+ *
  * </pre>
- * 
+ *
  */
 public class GoogleStaticMaps {
 
+    public static final String PARAMETER_MARKERS = "markers";
+
+    public static final String PARAMETER_CENTER = "center";
+
+    public static final String PARAMETER_SCALE = "scale";
+
+    public static final String PARAMETER_SENSOR = "sensor";
+
+    public static final String PARAMETER_SIZE = "size";
+
+    public static final String PARAMETER_KEY = "key";
+
+    public static final String PARAMETER_ZOOM = "zoom";
+
+    public static final String PARAMETER_MAPTYPE = "maptype";
+
     private final String mKey;
 
-    private final Map<String, String> mExtraArgs;
+    private Map<String, String> mExtraArgs;
 
     private final int mScale;
 
@@ -84,6 +101,19 @@ public class GoogleStaticMaps {
     }
 
     /**
+     * Adds the given key/value query parameter to the query string.
+     *
+     * @param key
+     * @param value
+     */
+    public void setExtraArg(String key, String value) {
+        if (mExtraArgs == null) {
+            mExtraArgs = new HashMap<String, String>();
+        }
+        mExtraArgs.put(key, value);
+    }
+
+    /**
      * Gets a map URL based on the parameters passed into the constructor and the parameters passed
      * in here. The "scale" parameter is automatically set based on the DPI
      * {@link DisplayMetrics#scaledDensity} from the provided context.
@@ -104,16 +134,16 @@ public class GoogleStaticMaps {
     public Uri getMap(float latitude, float longitude, int width, int height, boolean sensor,
             String marker) {
         final Builder b = BASE_URL.buildUpon();
-        b.appendQueryParameter("key", mKey);
-        b.appendQueryParameter("size", width / mScale + "x" + height / mScale);
-        b.appendQueryParameter("sensor", sensor ? "true" : "false");
-        b.appendQueryParameter("scale", Integer.toString(mScale));
+        b.appendQueryParameter(PARAMETER_KEY, mKey);
+        b.appendQueryParameter(PARAMETER_SIZE, width / mScale + "x" + height / mScale);
+        b.appendQueryParameter(PARAMETER_SENSOR, sensor ? "true" : "false");
+        b.appendQueryParameter(PARAMETER_SCALE, Integer.toString(mScale));
         final String latlon = latitude + "," + longitude;
 
-        b.appendQueryParameter("center", latlon);
+        b.appendQueryParameter(PARAMETER_CENTER, latlon);
 
         if (marker != null) {
-            b.appendQueryParameter("markers", marker + "|" + latlon);
+            b.appendQueryParameter(PARAMETER_MARKERS, marker + "|" + latlon);
         }
         for (final Entry<String, String> entry : mExtraArgs.entrySet()) {
             b.appendQueryParameter(entry.getKey(), entry.getValue());

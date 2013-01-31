@@ -1,7 +1,7 @@
 package edu.mit.mobile.android.maps;
 
 /*
- * Copyright (C) 2012 MIT Mobile Experience Lab
+ * Copyright (C) 2012-2013 MIT Mobile Experience Lab
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,9 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 /**
@@ -51,6 +53,7 @@ public class GoogleStaticMapView extends ImageView {
     private boolean mSensor;
     private float mLongitude;
     private float mLatitude;
+    private int mZoom = 14;
 
     private boolean mHasReceivedSet = false;
 
@@ -78,16 +81,33 @@ public class GoogleStaticMapView extends ImageView {
         final Map<String, String> mapArgs = new HashMap<String, String>();
 
         // XXX move this to xml attributes
-        mapArgs.put("zoom", "14");
-        mapArgs.put("maptype", "terrain");
+
+        mapArgs.put(GoogleStaticMaps.PARAMETER_ZOOM, String.valueOf(mZoom));
+        mapArgs.put(GoogleStaticMaps.PARAMETER_MAPTYPE, "terrain");
 
         mStaticMapUtil = new GoogleStaticMaps(context, mapArgs);
+        setOnClickListener(mOnClickListener);
     }
 
     public void setMarker(String marker) {
         mMarker = marker;
     }
 
+    /**
+     * <p>
+     * Sets the position of the marker on the map.
+     * </p>
+     *
+     * <blockquote>Applications that determine the user's location via a sensor must pass
+     * sensor=true within your Static Maps API request URL. If your application does not use a
+     * sensor, pass sensor=false.</blockquote>
+     *
+     * @param latitude
+     * @param longitude
+     * @param sensor
+     *            pass true if this coordinate represents the user's location as determined by a
+     *            sensor (such as a GPS locator).
+     */
     public void setMap(float latitude, float longitude, boolean sensor) {
         mSensor = sensor;
         mLatitude = latitude;
@@ -99,6 +119,28 @@ public class GoogleStaticMapView extends ImageView {
 
     public void clearMap() {
         mHasReceivedSet = false;
+    }
+
+    /**
+     * Sets the zoom level.
+     *
+     * @param zoom
+     */
+    public void setZoom(int zoom) {
+        if (zoom != mZoom) {
+            mZoom = zoom;
+
+            mStaticMapUtil.setExtraArg(GoogleStaticMaps.PARAMETER_ZOOM, String.valueOf(mZoom));
+        }
+    }
+
+    /**
+     * Gets the zoom level.
+     *
+     * @return
+     */
+    public int getZoom() {
+        return mZoom;
     }
 
     @Override
@@ -144,4 +186,14 @@ public class GoogleStaticMapView extends ImageView {
             mMapUpdateListener.onMapUpdate(this, staticMap);
         }
     }
+
+    private final OnClickListener mOnClickListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            getContext().startActivity(
+                    new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + mLatitude + "," + mLongitude
+                            + "?q=" + mLatitude + "," + mLongitude + "&z=" + mZoom)));
+        }
+    };
 }
